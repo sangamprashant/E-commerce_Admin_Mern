@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { AdminContext } from "../AdminContext";
 
-const SignIn = ({ user, setUser }) => {
+const SignIn = () => {
+  const {user,setUser,token, setToken} = useContext(AdminContext);
   const [dataInput, setDataInput] = useState({
     email: "",
     password: "",
@@ -46,8 +48,9 @@ const SignIn = ({ user, setUser }) => {
         const data = await response.json();
         toast.success(data.message);
         setUser(data.details);
-        localStorage.setItem("user", JSON.stringify(data.details));
-        localStorage.setItem("token", data.token);
+        sessionStorage.setItem("user", JSON.stringify(data.details));
+        sessionStorage.setItem("token", data.token);
+        setToken(data.token)
         setDataInput({
           email: "",
           password: "",

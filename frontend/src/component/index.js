@@ -1,5 +1,6 @@
 import Dashboard from "./Dashboard"
 import Nav from "./Nav"
+import Orders from "./Order/Orders"
 import AddProduct from "./Product/AddProduct"
 import DeleteProduct from "./Product/DeleteProduct"
 import OpenedProduct from "./Product/OpenedProduct"
@@ -18,4 +19,5 @@ export {
     AddProduct,
     DeleteProduct,
     Categories,
+    Orders,
 }

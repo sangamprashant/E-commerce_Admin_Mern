@@ -3,11 +3,15 @@ import { useState } from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { AddProduct, Categories, Dashboard, DeleteProduct, Nav, OpenedProduct, Product, SignIn } from "./component";
+import { AddProduct, Categories, Dashboard, DeleteProduct, Nav, OpenedProduct, Orders, Product, SignIn } from "./component";
+import { AdminContext } from "./AdminContext";
 function App() {
-  const [user ,setUser] = useState(JSON.parse(localStorage.getItem("user")))
+  const [user ,setUser] = useState(JSON.parse(sessionStorage.getItem("user")))
+  const [token, setToken] = useState(sessionStorage.getItem("token"))
+
   return (
     <BrowserRouter>
+    <AdminContext.Provider value={{user,setUser,token, setToken}}>
     <div className="bg-blue-900 min-h-screen flex">
     {user?<>
       <Nav />
@@ -19,10 +23,12 @@ function App() {
         <Route exact path="/products/delete/:productId" element={<DeleteProduct />}/>
         <Route exact path="/products/edit/:productId" element={<OpenedProduct />}/>
         <Route exact path="/categories" element={<Categories />}/>
+        <Route exact path="/orders" element={<Orders />}/>
       </Routes></div></div>
-    </>:<SignIn user={user} setUser={setUser}/>}
+    </>:<SignIn />}
       </div>
       <ToastContainer theme="dark"/>
+      </AdminContext.Provider>
     </BrowserRouter>
   );
 }

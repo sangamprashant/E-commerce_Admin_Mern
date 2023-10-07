@@ -52,7 +52,7 @@ router.post('/api/admin/do/login', async (req, res) => {
       }
   
       // Create a JWT token with the admin's ID as the payload
-      const token = jwt.sign({ adminId: admin._id }, 'your-secret-key');
+      const token = jwt.sign({ adminId: admin._id }, process.env.AUTH_SECRET);
   
       // Send the token and admin details as a response
       res.status(200).json({

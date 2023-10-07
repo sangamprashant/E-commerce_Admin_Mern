@@ -50,3 +50,9 @@ table.table-basic a{
 .csd{
     cursor: progress;
 }
+.TableRow {
+    border-top: 1px solid black;
+}
+.headding-capital{
+    text-transform: capitalize;
+}
