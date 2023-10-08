@@ -3,15 +3,27 @@ import React, { useContext, useEffect, useState } from "react";
 import { AdminContext } from "../../AdminContext";
 import { toast } from "react-toastify";
 
-const OrderTable = ({ status }) => {
+const OrderTable = () => {
   const { user, setUser, token, setToken } = useContext(AdminContext);
   const [Orders, setOrders] = useState([]);
+  const [getCount, setGetCount] = useState();
+  const orderStatusOptions = [
+    "confirm",
+    "packing",
+    "packed",
+    "shipping",
+    "out to deliver",
+    "delivered",
+    "canceled",
+  ];
+  const [status, setStatus] = useState(orderStatusOptions[0]);
 
   useEffect(() => {
-    fetchOder();
+    fetchOrder();
+    fetchCount();
   }, [status]);
 
-  const fetchOder = async () => {
+  const fetchOrder = async () => {
     try {
       const response = await axios.get(
         `http://localhost:5000/api/orders/get/by/status/${status}`,
@@ -29,11 +41,86 @@ const OrderTable = ({ status }) => {
     }
   };
 
+  const fetchCount = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/api/orders/count/by/status",
+        {
+          headers: {
+            Authorization: "Bearer " + token, // Set the Authorization header
+          },
+        }
+      );
+      if (response.status === 200) {
+        // console.log(response.data);
+        setGetCount(response.data);
+      }
+    } catch (error) {}
+  };
+
+  const getNextStatus = (currentStatus) => {
+    const currentIndex = orderStatusOptions.indexOf(currentStatus);
+    if (currentIndex !== -1 && currentIndex < orderStatusOptions.length - 1) {
+      return orderStatusOptions[currentIndex + 1];
+    } else {
+      return "No Next Status";
+    }
+  };
+
+  const handleNextStatus = async (currentStatus, orderId) => {
+    const currentIndex = orderStatusOptions.indexOf(currentStatus);
+    if (currentIndex !== -1 && currentIndex < orderStatusOptions.length - 1) {
+      const nextStatus = orderStatusOptions[currentIndex + 1];
+      try {
+        // Send a PUT request to update the order status
+        const response = await axios.put(
+          `http://localhost:5000/api/orders/update-status/${orderId}`,
+          {
+            status: nextStatus,
+          },
+          {
+            headers: {
+              Authorization: "Bearer " + token,
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          toast.success(response.data.message);
+          // Order status updated successfully, refresh the order list
+          fetchOrder();
+          fetchCount();
+        }
+      } catch (error) {
+        toast.error(error.response.data.message);
+      }
+    } else {
+      toast.error("No next status");
+    }
+  };
+
   return (
     <section ame="text-gray-600 body-font">
       <div className="container px-5 py-3 mx-auto">
+        <div className="flex flex-row w-full mb-5 justify-evenly group-in-range:7">
+          {orderStatusOptions.map((count, index) => (
+            <div
+              key={index}
+              className={`productCount text-center ${
+                count === status ? "active" : ""
+              }`}
+              onClick={() => setStatus(count)}
+            >
+              <h1>{count}</h1>
+              <p>{getCount ? getCount[count] : 0}</p>
+            </div>
+          ))}
+        </div>
+
         <div className="flex flex-col text-center w-full mb-5">
-          <h1 className="sm:text-4xl text-3xl font-medium title-font mb-2 text-gray-900 headding-capital">{status}</h1>
+          <h1 className="sm:text-4xl text-3xl font-medium title-font mb-2 text-gray-900 headding-capital">
+            {status}
+          </h1>
         </div>
         <div className="w-full mx-auto overflow-auto">
           <table className="table-auto w-full text-left whitespace-no-wrap">
@@ -60,44 +147,72 @@ const OrderTable = ({ status }) => {
                 <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">
                   Paid
                 </th>
-                <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">
+                {(status !== "delivered" && status !== "canceled")&&<th className="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">
                   Next Status
-                </th>
+                </th>}
               </tr>
             </thead>
             <tbody>
               {Orders &&
                 Orders.map((order) => (
                   <tr key={order._id} className="TableRow">
-                    <td className="px-4 py-3">{new Date(order.createdAt).toLocaleString()}</td>
+                    <td className="px-4 py-3">
+                      {new Date(order.createdAt).toLocaleString()}
+                    </td>
                     <td className="px-4 py-3">{order.name}</td>
                     <td className="px-4 py-3">{order.street}</td>
-                    <td className="px-4 py-3 text-lg text-gray-900">{order.city}</td>
+                    <td className="px-4 py-3 text-lg text-gray-900">
+                      {order.city}
+                    </td>
                     <td className="w-10 text-center">{order.postalCode}</td>
                     <td className="px-4 py-3">
                       <table className="table">
                         <thead>
                           <tr>
-                            <th>Product Name</th>
-                            <th>Quantity</th>
-                            <th>Price</th>
+                            <th className="px-3">Product Name</th>
+                            <th className="px-3">Quantity</th>
+                            <th className="px-3">Price</th>
                           </tr>
                         </thead>
-                        <tbody>
+                        <tbody className="productDetails">
                           {order.line_items.map((item, index) => (
                             <tr key={index}>
-                              <td>{item.priceData.product_data.name}<hr /></td>
-                              <td>{item.quantity}</td>
-                              <td>{item.priceData.unit_amount}</td>
+                              <td
+                                className={
+                                  index % 2 == 0 ? "orderProductEven" : ""
+                                }
+                              >
+                                {item.priceData.product_data.name}
+                              </td>
+                              <td className="orderPrice">{item.quantity}</td>
+                              <td className="orderPrice">
+                                {item.priceData.unit_amount}
+                              </td>
                             </tr>
                           ))}
                         </tbody>
                       </table>
                     </td>
-                    <td className="px-4 py-3">{order.paid ? "Yes" : "No"}</td>
-                    <td className="px-4 py-3">
-                      <button>Next</button>
+                    <td
+                      className={`px-4 py-3 ${
+                        order.paid ? "text-green-600" : "text-red-600"
+                      } font-bold`}
+                    >
+                      {order.paid ? "Yes" : "No"}
                     </td>
+                    {(status !== "delivered" && status !== "canceled")&&<td className="px-4 py-3 orderButton">
+                      <button>Print</button>
+                      <span>
+                        once order status is changed it will not be back.
+                      </span>
+                      <button
+                        onClick={() =>
+                          handleNextStatus(order.status, order._id)
+                        }
+                      >
+                        Next:{getNextStatus(order.status)}
+                      </button>
+                    </td>}
                   </tr>
                 ))}
             </tbody>

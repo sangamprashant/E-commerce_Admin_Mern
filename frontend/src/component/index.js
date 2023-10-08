@@ -6,6 +6,7 @@ import DeleteProduct from "./Product/DeleteProduct"
 import OpenedProduct from "./Product/OpenedProduct"
 import Product from "./Product/Product"
 import ProductForm from "./Product/ProductForm"
+import Setting from "./Setting"
 import SignIn from "./SignIn"
 import Categories from "./categories/Categories"
 
@@ -20,4 +21,5 @@ export {
     DeleteProduct,
     Categories,
     Orders,
+    Setting,
 }

@@ -17,7 +17,7 @@ const Nav = () => {
   const Active = inActive + " bg-white text-blue-900 rounded-l-lg";
   return (
     <aside className="text-white p-4 pr-0">
-      <Link to="/admin" className="flex gap-1 mb-4 mr-4">
+      <Link to="/" className="flex gap-1 mb-4 mr-4">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -35,7 +35,7 @@ const Nav = () => {
         <span>Ecommerce Admin</span>
       </Link>
       <nav className="flex flex-col gap-2">
-        <Link to="/admin" className={inActive}>
+        <Link to="/" className={inActive}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
