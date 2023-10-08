@@ -7,7 +7,7 @@ const requireLogin = require("../middleware/requireLogin");
 const bcrypt = require("bcrypt");
 
 // Signup route
-router.post("/signup", async (req, res) => {
+router.post("/create/admin",requireLogin, async (req, res) => {
   try {
     const { email, password } = req.body;
 

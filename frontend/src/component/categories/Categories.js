@@ -1,9 +1,12 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { withSwal } from "react-sweetalert2";
 import audio from "../audio/alert.mp3"
+import { AdminContext } from "../../AdminContext";
+import { toast } from "react-toastify";
 
 function Categories({ swal }) {
+  const { token,nav,setNav } = useContext(AdminContext);
   const [name, setName] = useState("");
   const [parentCategory, setParentCategory] = useState("");
   const [catEdit, setCatEdit] = useState(null);
@@ -11,12 +14,17 @@ function Categories({ swal }) {
   const [properties, setProperties] = useState([]);
 
   useEffect(() => {
+    setNav("category")
     fetchData();
   }, []);
 
   const fetchData = async () => {
     try {
-      const result = await axios.get("http://localhost:5000/api/categories");
+      const result = await axios.get("http://localhost:8000/api/categories",{
+        headers: {
+          Authorization: "Bearer " + token, // Set the Authorization header
+        },
+      });
       setCategories(result.data);
     } catch (error) {
       console.error("Error fetching categories:", error);
@@ -26,7 +34,7 @@ function Categories({ swal }) {
   const handelSave = async (e) => {
     e.preventDefault();
     if (name.trim() === "") {
-      console.error("Name is empty. Please enter a name.");
+      toast.error("Name is empty. Please enter a name.");
       return;
     }
     try {
@@ -40,9 +48,17 @@ function Categories({ swal }) {
       };
       if (catEdit) {
         data.id = catEdit._id;
-        await axios.put("http://localhost:5000/api/categories", data);
+        await axios.put("http://localhost:8000/api/categories", data,{
+          headers: {
+            Authorization: "Bearer " + token, // Set the Authorization header
+          },
+        });
       } else {
-        await axios.post("http://localhost:5000/api/categories", data);
+        await axios.post("http://localhost:8000/api/categories", data,{
+          headers: {
+            Authorization: "Bearer " + token, // Set the Authorization header
+          },
+        });
       }
       setName("");
       setParentCategory("");
@@ -82,7 +98,13 @@ function Categories({ swal }) {
       .then(async (result) => {
         if (result.isConfirmed) {
           try {
-            await axios.delete(`http://localhost:5000/api/categories/${category._id}`);
+            await axios.delete(`http://localhost:8000/api/categories/${category._id}`,
+            {
+              headers: {
+                Authorization: "Bearer " + token, // Set the Authorization header
+              },
+            }
+            );
             fetchData();
           } catch (error) {
             console.error("Error deleting category:", error);

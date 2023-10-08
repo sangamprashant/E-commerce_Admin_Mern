@@ -3,10 +3,11 @@ const mongoose = require("mongoose");
 const router = express.Router();
 const Categories = mongoose.model("categories");
 const jwt = require("jsonwebtoken");
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
+const requireLogin = require("../middleware/requireLogin");
 
 // Signup route
-router.post('/api/categories', async (req, res) => {
+router.post("/api/categories", requireLogin, async (req, res) => {
   try {
     const { name, parentCategory, properties } = req.body;
 
@@ -27,7 +28,7 @@ router.post('/api/categories', async (req, res) => {
 });
 
 // Get all categories route
-router.get('/api/categories', async (req, res) => {
+router.get("/api/categories", requireLogin, async (req, res) => {
   try {
     const categories = await Categories.find({}).populate("parent");
     res.status(200).json(categories);
@@ -38,7 +39,7 @@ router.get('/api/categories', async (req, res) => {
 });
 
 // Update category route
-router.put('/api/categories', async (req, res) => {
+router.put("/api/categories", requireLogin, async (req, res) => {
   try {
     const { name, parentCategory, id, properties } = req.body;
 
@@ -56,36 +57,38 @@ router.put('/api/categories', async (req, res) => {
   }
 });
 // Get category by ID route
-router.get('/api/categories/:categoryId', async (req, res) => {
-    try {
-      const { categoryId } = req.params;
-      const category = await Categories.findOne({ _id: categoryId });
-  
-      if (category) {
-        res.status(200).json(category);
-      } else {
-        res.status(404).json({ error: "Category not found" });
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      res.status(500).json({ error: "Failed to fetch the category" });
+router.get("/api/categories/:categoryId", requireLogin, async (req, res) => {
+  try {
+    const { categoryId } = req.params;
+    const category = await Categories.findOne({ _id: categoryId });
+
+    if (category) {
+      res.status(200).json(category);
+    } else {
+      res.status(404).json({ error: "Category not found" });
     }
-  });
-  
-  // Delete category by ID route
-  router.delete('/api/categories/:categoryId', async (req, res) => {
-    try {
-      const { categoryId } = req.params;
-      const deletedCategory = await Categories.findOneAndDelete({ _id: categoryId });
-  
-      if (deletedCategory) {
-        res.status(200).json({ message: "Category deleted successfully" });
-      } else {
-        res.status(404).json({ error: "Category not found" });
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      res.status(500).json({ error: "Failed to delete the category" });
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ error: "Failed to fetch the category" });
+  }
+});
+
+// Delete category by ID route
+router.delete("/api/categories/:categoryId", requireLogin, async (req, res) => {
+  try {
+    const { categoryId } = req.params;
+    const deletedCategory = await Categories.findOneAndDelete({
+      _id: categoryId,
+    });
+
+    if (deletedCategory) {
+      res.status(200).json({ message: "Category deleted successfully" });
+    } else {
+      res.status(404).json({ error: "Category not found" });
     }
-  });
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ error: "Failed to delete the category" });
+  }
+});
 module.exports = router;

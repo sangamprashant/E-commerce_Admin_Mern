@@ -8,6 +8,7 @@ const ModelSchema = new mongoose.Schema({
     images:[{type:String}],
     category: { type: mongoose.Schema.Types.ObjectId, ref: "categories" },
     properties:{type:Object},
+    isDeleted:{type:Boolean,default:false}
 }, {
   timestamps: true // This option adds "createdAt" and "updatedAt" fields
 });

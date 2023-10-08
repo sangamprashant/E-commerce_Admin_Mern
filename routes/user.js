@@ -1,11 +1,12 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const requireLogin = require("../middleware/requireLogin");
 const router = express.Router();
 const Product = mongoose.model("product");
 const User = mongoose.model("client");
 
 // Route to get the count of clients
-router.get("/api/client/count", async (req, res) => {
+router.get("/api/client/count",requireLogin, async (req, res) => {
   try {
     const clientCount = await User.countDocuments({});
     res.status(200).json( clientCount );

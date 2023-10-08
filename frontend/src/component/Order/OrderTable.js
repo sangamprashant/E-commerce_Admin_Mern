@@ -26,7 +26,7 @@ const OrderTable = () => {
   const fetchOrder = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/orders/get/by/status/${status}`,
+        `http://localhost:8000/api/orders/get/by/status/${status}`,
         {
           headers: {
             Authorization: "Bearer " + token, // Set the Authorization header
@@ -44,7 +44,7 @@ const OrderTable = () => {
   const fetchCount = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/orders/count/by/status",
+        "http://localhost:8000/api/orders/count/by/status",
         {
           headers: {
             Authorization: "Bearer " + token, // Set the Authorization header
@@ -74,7 +74,7 @@ const OrderTable = () => {
       try {
         // Send a PUT request to update the order status
         const response = await axios.put(
-          `http://localhost:5000/api/orders/update-status/${orderId}`,
+          `http://localhost:8000/api/orders/update-status/${orderId}`,
           {
             status: nextStatus,
           },

@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { AdminContext } from "../AdminContext";
 
 const Nav = () => {
-  const { user, setUser } = useContext(AdminContext);
+  const {user, setUser, token,nav,setNav } = useContext(AdminContext);
 
   const navigate = useNavigate();
 
@@ -35,7 +35,7 @@ const Nav = () => {
         <span>Ecommerce Admin</span>
       </Link>
       <nav className="flex flex-col gap-2">
-        <Link to="/" className={inActive}>
+        <Link to="/" className={nav==="home"?Active:inActive}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -53,7 +53,7 @@ const Nav = () => {
           Dashboard
         </Link>
 
-        <Link to="/products" className={inActive}>
+        <Link to="/products" className={nav==="product"?Active:inActive}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -71,7 +71,7 @@ const Nav = () => {
           Products
         </Link>
 
-        <Link to="/categories" className={Active}>
+        <Link to="/categories" className={nav==="category"?Active:inActive}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -89,7 +89,7 @@ const Nav = () => {
           Categories
         </Link>
 
-        <Link to="/orders" className={inActive}>
+        <Link to="/orders" className={nav==="order"?Active:inActive}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -107,7 +107,7 @@ const Nav = () => {
           Orders
         </Link>
 
-        <Link to="/settings" className={inActive}>
+        <Link to="/settings" className={nav==="setting"?Active:inActive}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"

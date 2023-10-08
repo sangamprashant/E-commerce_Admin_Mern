@@ -8,10 +8,11 @@ import { AdminContext } from "./AdminContext";
 function App() {
   const [user ,setUser] = useState(JSON.parse(sessionStorage.getItem("user")))
   const [token, setToken] = useState(sessionStorage.getItem("token"))
+  const [nav,setNav] = useState("")
 
   return (
     <BrowserRouter>
-    <AdminContext.Provider value={{user,setUser,token, setToken}}>
+    <AdminContext.Provider value={{user,setUser,token, setToken,nav,setNav}}>
     <div className="bg-blue-900 min-h-screen flex">
     {user?<>
       <Nav />

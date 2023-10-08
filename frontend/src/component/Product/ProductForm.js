@@ -1,12 +1,14 @@
 
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ReactSortable } from "react-sortablejs";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "../../Firebase";
 import { useNavigate } from "react-router-dom";
+import { AdminContext } from "../../AdminContext";
 
 const ProductForm = ({_id,title,description,price,images,category,properties}) => {
+  const { user, setUser, token, setToken } = useContext(AdminContext);
     const [productDetails, setProductDetails] = useState({
         title: title || "", // Provide default values or empty strings as needed
         description: description || "",
@@ -24,7 +26,13 @@ const ProductForm = ({_id,title,description,price,images,category,properties}) =
     },[])
 
     const fetchCategories = async () =>{
-      await axios.get("http://localhost:5000/api/categories").then((result) => {
+      await axios.get("http://localhost:8000/api/categories",
+        {
+          headers: {
+            Authorization: "Bearer " + token, // Set the Authorization header
+          },
+        }
+      ).then((result) => {
         setCategories(result.data);
       });
     }
@@ -33,17 +41,25 @@ const ProductForm = ({_id,title,description,price,images,category,properties}) =
         setProductDetails({...productDetails,[e.target.name]:e.target.value})
     }
 
-    const handelSave = async (e) =>{
-        e.preventDefault();
-        if(_id){
-            //update the selected product
-            await axios.put("http://localhost:5000/api/products",{...productDetails,_id})
-        }else{
-            //save new product
-            await axios.post("http://localhost:5000/api/products",productDetails)
-        }
-        navigate("/products")
-    }
+    const handleSave = async (e) => {
+      e.preventDefault();
+      if (_id) {
+        // Update the selected product
+        await axios.put(`http://localhost:8000/api/products/${_id}`, {...productDetails}, {
+          headers: {
+            Authorization: "Bearer " + token, // Set the Authorization header
+          },
+        });
+      } else {
+        // Save a new product
+        await axios.post("http://localhost:8000/api/products", productDetails, {
+          headers: {
+            Authorization: "Bearer " + token, // Set the Authorization header
+          },
+        });
+      }
+      navigate("/products");
+    };
 
     async function selectImages(e) {
         const files = e.target?.files;
@@ -92,7 +108,7 @@ const ProductForm = ({_id,title,description,price,images,category,properties}) =
     }
     
   return (
-    <form onSubmit={handelSave}> 
+    <form onSubmit={handleSave}> 
         <label>Product Name</label>
         <input type="text" placeholder="product name" name="title" value={productDetails.title} onChange={handelInput} />
         <label>Product Category</label>

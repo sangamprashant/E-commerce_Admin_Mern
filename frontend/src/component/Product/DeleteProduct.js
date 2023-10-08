@@ -1,8 +1,10 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { AdminContext } from "../../AdminContext";
 
 function DeleteProduct() {
+  const { token, nav, setNav } = useContext(AdminContext);
   const navigate = useNavigate()
   const { productId } = useParams();
   const [product, setProduct] = useState();
@@ -15,18 +17,29 @@ function DeleteProduct() {
     if (!id) {
       return;
     } else {
-      axios.get(`http://localhost:5000/api/products/${id}`).then((response) => {
-        setProduct(response.data);
-      });
+      axios
+        .get(`http://localhost:8000/api/products/${id}`, {
+          headers: {
+            Authorization: "Bearer " + token, // Set the Authorization header
+          },
+        })
+        .then((response) => {
+          setProduct(response.data);
+        });
     }
   };
+  
 
   function goBack() {
     navigate("/products");
   }
 
   function deleteProduct() {
-    axios.delete(`http://localhost:5000/api/products/${productId}`).then(() => {
+    axios.put(`http://localhost:8000/api/products/delete/${productId}`,{},{
+      headers: {
+        Authorization: "Bearer " + token, // Set the Authorization header
+      },
+    }).then(() => {
       goBack();
     });
   }

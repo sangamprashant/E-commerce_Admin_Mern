@@ -19,10 +19,7 @@ const validStatuses = [
 ];
 
 // Define an API endpoint to retrieve orders by status
-router.get(
-  "/api/orders/get/by/status/:status",
-  requireLogin,
-  async (req, res) => {
+router.get("/api/orders/get/by/status/:status",requireLogin,async (req, res) => {
     try {
       const { status } = req.params;
 

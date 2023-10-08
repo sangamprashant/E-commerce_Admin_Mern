@@ -1,11 +1,11 @@
 import axios from "axios";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { AdminContext } from "../AdminContext";
 
 function Setting() {
   const [initial, setInitial] = useState(true);
-  const { user, setUser, token, setToken } = useContext(AdminContext);
+  const { user, setUser, token, setToken,setNav } = useContext(AdminContext);
 
   const [emailUpdate, setEmailUpdate] = useState({
     oldEmail: JSON.parse(sessionStorage.getItem("user")).email,
@@ -19,12 +19,16 @@ function Setting() {
     newPassword: "",
   });
 
+  useEffect(()=>{
+    setNav("setting")
+  })
+
   const handleEmailUpdate = async (e) => {
     e.preventDefault();
     if (emailUpdate.oldEmail && emailUpdate.newEmail && emailUpdate.password) {
       try {
         const response = await axios.put(
-          "http://localhost:5000/api/admin/update/email",
+          "http://localhost:8000/api/admin/update/email",
           emailUpdate,
           {
             headers: {
@@ -67,7 +71,7 @@ function Setting() {
     ) {
       try {
         const response = await axios.put(
-          "http://localhost:5000/api/admin/update/password",
+          "http://localhost:8000/api/admin/update/password",
           passwordUpdate,
           {
             headers: {
