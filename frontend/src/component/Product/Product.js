@@ -13,7 +13,7 @@ const Product = () => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch("http://localhost:8000/api/products", {
+      const response = await fetch("/api/products", {
         headers: {
           Authorization: "Bearer " + token, // Set the Authorization header
         },

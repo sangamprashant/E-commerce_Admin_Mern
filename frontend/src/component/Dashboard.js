@@ -165,7 +165,7 @@ function Dashboard() {
   const fetchStatusCounts = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8000/api/orders/count/by/status",
+        "/api/orders/count/by/status",
         {
           headers: {
             Authorization: "Bearer " + token,
@@ -181,7 +181,7 @@ function Dashboard() {
   };
   const fetchUserCount = async () =>{
     try {
-      const response = await axios.get("http://localhost:8000/api/client/count",{
+      const response = await axios.get("/api/client/count",{
         headers: {
           Authorization: "Bearer " + token, // Set the Authorization header
         },

@@ -28,7 +28,7 @@ function Setting() {
     if (emailUpdate.oldEmail && emailUpdate.newEmail && emailUpdate.password) {
       try {
         const response = await axios.put(
-          "http://localhost:8000/api/admin/update/email",
+          "/api/admin/update/email",
           emailUpdate,
           {
             headers: {
@@ -71,7 +71,7 @@ function Setting() {
     ) {
       try {
         const response = await axios.put(
-          "http://localhost:8000/api/admin/update/password",
+          "/api/admin/update/password",
           passwordUpdate,
           {
             headers: {

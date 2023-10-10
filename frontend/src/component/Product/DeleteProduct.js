@@ -18,7 +18,7 @@ function DeleteProduct() {
       return;
     } else {
       axios
-        .get(`http://localhost:8000/api/products/${id}`, {
+        .get(`/api/products/${id}`, {
           headers: {
             Authorization: "Bearer " + token, // Set the Authorization header
           },
@@ -35,7 +35,7 @@ function DeleteProduct() {
   }
 
   function deleteProduct() {
-    axios.put(`http://localhost:8000/api/products/delete/${productId}`,{},{
+    axios.put(`/api/products/delete/${productId}`,{},{
       headers: {
         Authorization: "Bearer " + token, // Set the Authorization header
       },
