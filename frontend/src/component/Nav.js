@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AdminContext } from "../AdminContext";
 
-const Nav = () => {
+const Nav = ({toggleMenu, isMenuOpen}) => {
   const {user, setUser, token,nav,setNav } = useContext(AdminContext);
 
   const navigate = useNavigate();
@@ -34,6 +34,12 @@ const Nav = () => {
         </svg>
         <span>Ecommerce Admin</span>
       </Link>
+      <button
+                className={`lg:hidden fixed bottom-4 right-4 z-10 bg-blue-900 p-2 rounded-full text-white`}
+                onClick={toggleMenu}
+              >
+                {isMenuOpen ? "Close Menu" : "Open Menu"}
+              </button>
       <nav className="flex flex-col gap-2">
         <Link to="/" className={nav==="home"?Active:inActive}>
           <svg

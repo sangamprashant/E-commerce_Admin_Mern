@@ -1,5 +1,6 @@
 import Dashboard from "./Dashboard"
 import Nav from "./Nav"
+import OrderPrint from "./Order/OrderPrint"
 import Orders from "./Order/Orders"
 import AddProduct from "./Product/AddProduct"
 import DeleteProduct from "./Product/DeleteProduct"
@@ -22,4 +23,5 @@ export {
     Categories,
     Orders,
     Setting,
+    OrderPrint,
 }

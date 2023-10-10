@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { AdminContext } from "../../AdminContext";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const OrderTable = () => {
   const { user, setUser, token, setToken } = useContext(AdminContext);
@@ -17,6 +18,7 @@ const OrderTable = () => {
     "canceled",
   ];
   const [status, setStatus] = useState(orderStatusOptions[0]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchOrder();
@@ -147,9 +149,11 @@ const OrderTable = () => {
                 <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">
                   Paid
                 </th>
-                {(status !== "delivered" && status !== "canceled")&&<th className="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">
-                  Next Status
-                </th>}
+                {status !== "delivered" && status !== "canceled" && (
+                  <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">
+                    Next Status
+                  </th>
+                )}
               </tr>
             </thead>
             <tbody>
@@ -175,18 +179,18 @@ const OrderTable = () => {
                           </tr>
                         </thead>
                         <tbody className="productDetails">
-                          {order.line_items.map((item, index) => (
+                          {order?.line_items?.map((item, index) => (
                             <tr key={index}>
                               <td
                                 className={
                                   index % 2 == 0 ? "orderProductEven" : ""
                                 }
                               >
-                                {item.priceData.product_data.name}
+                                {item?.price_data?.product_data?.name}
                               </td>
                               <td className="orderPrice">{item.quantity}</td>
                               <td className="orderPrice">
-                                {item.priceData.unit_amount}
+                                {item?.price_data?.unit_amount}
                               </td>
                             </tr>
                           ))}
@@ -200,19 +204,29 @@ const OrderTable = () => {
                     >
                       {order.paid ? "Yes" : "No"}
                     </td>
-                    {(status !== "delivered" && status !== "canceled")&&<td className="px-4 py-3 orderButton">
-                      <button>Print</button>
-                      <span>
-                        once order status is changed it will not be back.
-                      </span>
-                      <button
-                        onClick={() =>
-                          handleNextStatus(order.status, order._id)
-                        }
-                      >
-                        Next:{getNextStatus(order.status)}
-                      </button>
-                    </td>}
+                    {status !== "delivered" && status !== "canceled" && (
+                      <td className="px-4 py-3 orderButton">
+                        <button
+                          onClick={() =>
+                            navigate(`/order/invoice/${order._id}`, {
+                              state: { orderDatas: order },
+                            })
+                          }
+                        >
+                          Print
+                        </button>
+                        <span>
+                          once order status is changed it will not be back.
+                        </span>
+                        <button
+                          onClick={() =>
+                            handleNextStatus(order.status, order._id)
+                          }
+                        >
+                          Next:{getNextStatus(order.status)}
+                        </button>
+                      </td>
+                    )}
                   </tr>
                 ))}
             </tbody>
