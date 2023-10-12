@@ -14,18 +14,22 @@ require('./models/product')
 require('./models/categories')
 require('./models/order')
 require('./models/user')
+require('./models/subscription')
+require('./models/contact')
 
 app.use(require("./routes/admin"))
 app.use(require("./routes/product"))
 app.use(require("./routes/categories"))
 app.use(require("./routes/user"))
 app.use(require("./routes/order"))
+app.use(require("./routes/subscription"))
+app.use(require("./routes/contact"))
 
 // connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  dbName: "next_ecommerce",
+  dbName: process.env.MONGODB_DATABADE,
 }).then(() => {
   console.log('Connected to MongoDB');
 }).catch((error) => {

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { AddProduct, Categories, Dashboard, DeleteProduct, Nav, OpenedProduct, OrderPrint, Orders, Product, Setting, SignIn } from "./component";
+import { AddProduct, Categories, Dashboard, DeleteProduct, MessageUser, Nav, OpenedProduct, OrderPrint, Orders, Product, Respones, Setting, SignIn } from "./component";
 import { AdminContext } from "./AdminContext";
 function App() {
   const [user ,setUser] = useState(JSON.parse(sessionStorage.getItem("user")))
@@ -25,7 +25,9 @@ function App() {
         <Route exact path="/products/edit/:productId" element={<OpenedProduct />}/>
         <Route exact path="/categories" element={<Categories />}/>
         <Route exact path="/orders" element={<Orders />}/>
-        <Route exact path="/order/invoice/:id" element={<OrderPrint />}/>
+        <Route exact path="/orders/invoice/:id" element={<OrderPrint />}/>
+        <Route exact path="response" element={<Respones />}/>
+        <Route exact path="response/:id" element={<MessageUser />}/>
         <Route exact path="/settings" element={<Setting />}/>
       </Routes></div></div>
     </>:<SignIn />}

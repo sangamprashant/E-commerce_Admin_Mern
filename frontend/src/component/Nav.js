@@ -13,8 +13,14 @@ const Nav = ({toggleMenu, isMenuOpen}) => {
     navigate("/")
   }
 
-  const inActive = "flex gap-1 p-1";
-  const Active = inActive + " bg-white text-blue-900 rounded-l-lg";
+  const isActive = (path) => {
+    if (path === "/") {
+      return window.location.pathname === "/" ? "flex bg-white text-blue-900 rounded-l-lg p-4" : "flex gap-1 p-4";
+    } else {
+      return window.location.pathname.startsWith(path) ? "flex bg-white text-blue-900 rounded-l-lg p-4" : "flex gap-1 p-4";
+    }
+  };
+
   return (
     <aside className="text-white p-4 pr-0">
       <Link to="/" className="flex gap-1 mb-4 mr-4">
@@ -41,7 +47,7 @@ const Nav = ({toggleMenu, isMenuOpen}) => {
                 {isMenuOpen ? "Close Menu" : "Open Menu"}
               </button>
       <nav className="flex flex-col gap-2">
-        <Link to="/" className={nav==="home"?Active:inActive}>
+        <Link to="/" className={isActive("/")}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -59,7 +65,7 @@ const Nav = ({toggleMenu, isMenuOpen}) => {
           Dashboard
         </Link>
 
-        <Link to="/products" className={nav==="product"?Active:inActive}>
+        <Link to="/products" className={isActive("/products")}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -77,7 +83,7 @@ const Nav = ({toggleMenu, isMenuOpen}) => {
           Products
         </Link>
 
-        <Link to="/categories" className={nav==="category"?Active:inActive}>
+        <Link to="/categories" className={isActive("/categories")}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -95,7 +101,7 @@ const Nav = ({toggleMenu, isMenuOpen}) => {
           Categories
         </Link>
 
-        <Link to="/orders" className={nav==="order"?Active:inActive}>
+        <Link to="/orders" className={isActive("/orders")}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -113,7 +119,14 @@ const Nav = ({toggleMenu, isMenuOpen}) => {
           Orders
         </Link>
 
-        <Link to="/settings" className={nav==="setting"?Active:inActive}>
+        <Link to="/response" className={isActive("/response")}>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+</svg>
+
+          Response
+        </Link>
+        <Link to="/settings" className={isActive("/settings")}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -136,7 +149,7 @@ const Nav = ({toggleMenu, isMenuOpen}) => {
           Settings
         </Link>
 
-        <button className={inActive} onClick={handelLogout}>
+        <button className={isActive("/logout")} onClick={handelLogout}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"

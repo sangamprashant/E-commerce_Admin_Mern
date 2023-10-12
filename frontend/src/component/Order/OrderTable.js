@@ -208,7 +208,7 @@ const OrderTable = () => {
                       <td className="px-4 py-3 orderButton">
                         <button
                           onClick={() =>
-                            navigate(`/order/invoice/${order._id}`, {
+                            navigate(`/orders/invoice/${order._id}`, {
                               state: { orderDatas: order },
                             })
                           }

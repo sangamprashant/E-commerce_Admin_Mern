@@ -43,7 +43,7 @@ function OrderPrint() {
           />
         </div>
       </div>
-      <h3>Sender Details</h3>
+      {/* <h3>Sender Details</h3>
       <table className="invoice-table">
         <tbody>
           <tr>
@@ -63,7 +63,7 @@ function OrderPrint() {
             <td>{orderDatas.postalCode || "N.A."}</td>
           </tr>
         </tbody>
-      </table>
+      </table> */}
 
       <div className="invoice-details">
         <div className="invoice-section">
